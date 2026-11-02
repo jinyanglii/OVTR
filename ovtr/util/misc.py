@@ -435,7 +435,7 @@ def init_distributed_mode(args):
         ntasks = int(os.environ["SLURM_NTASKS"])
         node_list = os.environ["SLURM_NODELIST"]
         num_gpus = torch.cuda.device_count()
-        addr = subprocess.getoutput("scontrol show hostname {} | head -n1".format(node_list))
+        addr = subprocess.check_output(["scontrol", "show", "hostname", node_list]).decode().splitlines()[0]
         os.environ["MASTER_PORT"] = os.environ.get("MASTER_PORT", "29500")
         os.environ["MASTER_ADDR"] = addr
         os.environ["WORLD_SIZE"] = str(ntasks)
